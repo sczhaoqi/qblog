@@ -28,6 +28,8 @@ import 'prismjs/themes/prism.css'
 import HelloWorld from '../components/HelloWorld.vue'
 import TinymceEditor from '../components/TinymceEditor.vue';
 
+import { updatePage } from '../http/api.js'
+
 export default {
     name: "index",
     components: {
@@ -37,6 +39,7 @@ export default {
     data() {
         return {
             show: true,
+            title: 'test page',
             content: 'hello vue3-tinymce!',
             // editor 配置项
             setting: {
@@ -52,6 +55,9 @@ export default {
         showContent(){
             console.log(this)
             console.log(this.content)
+            updatePage({id:1, title: this.title}).then(res => {
+                console.log(res)
+            })
         },
         gotToPage: function (pNum) {
             this.$router.push({ path: '/page', query: { pNum: pNum } })
