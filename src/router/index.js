@@ -8,10 +8,6 @@ const router = createRouter({
     routes: [
         {
             path: '/',
-            redirect: '/index'
-        },
-        {
-            path: '/index',
             name: 'index',
             component: Index
         },
