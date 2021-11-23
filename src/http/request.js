@@ -1,6 +1,5 @@
 import axios from 'axios'
-import {networkConfig} from './networkConfig.js'
-
+import { networkConfig } from './networkConfig.js'
 // 创建axios实例
 export function requestService(config) {
     const service = axios.create({
@@ -13,14 +12,13 @@ export function requestService(config) {
     service.interceptors.request.use(config => {
         return config
     }, error => {
-        console.log(error)
         Promise.reject(error)
     })
 
     // 响应拦截器
     service.interceptors.response.use(res => {
-            console.log(res)
-        },
+        return res
+    },
         error => {
             return Promise.reject(error)
         }

@@ -1,71 +1,89 @@
 <template>
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Hello Vue 3 + Vite" />
-    <el-button-group>
-        <el-button type="primary" @click="gotToPage(1)">页面1</el-button>
-        <el-button type="primary" @click="gotToPage(2)">页面2</el-button>
-        <el-button type="primary" @click="gotToPage(3)">页面3</el-button>
-    </el-button-group>
-
-    <el-button-group>
-        <el-button type="primary" @click="gotToPost(1)">文章1</el-button>
-        <el-button type="primary" @click="gotToPost(2)">文章2</el-button>
-        <el-button type="primary" @click="gotToPost(3)">文章3</el-button>
-    </el-button-group>
-    <div contenteditable=true v-html="content" disabled></div>
-    <div>
-        <TinymceEditor :config="setting" :content="content" @content-change="contentChange" />
-    </div>
-    <el-button @click="showContent()">Console</el-button>
-    <el-button @click="clear()">清空内容</el-button>
-    <el-button @click="disabled()">禁用</el-button>
+    <el-row>
+        <e-col :span="12">
+            <div>
+                <p>页面</p>
+                <ul class="box">
+                    <li v-for="page in pageList" :key="page.id" class="scrollbar-demo-item">
+                        {{ '[' + page.id + ']' }}{{ page.title }}
+                        <el-link type="primary" @click="gotToPage(page.id)">查看</el-link>|
+                        <el-link type="primary" @click="gotToEditPage(page.id)">编辑</el-link>
+                    </li>
+                    <li>
+                        <el-link type="primary" @click="gotToEditPage('new')">新建页面</el-link>
+                    </li>
+                </ul>
+            </div>
+        </e-col>
+        <el-col :span="12">
+            <div>
+                <p>文章</p>
+                <ul class="box">
+                    <li v-for="post in postList" :key="post.id" class="scrollbar-demo-item">
+                        {{ '[' + post.id + ']' }}{{ post.title }}
+                        <el-link type="primary" @click="gotToPost(post.id)">查看</el-link>|
+                        <el-link type="primary" @click="gotToEditPost(post.id)">编辑</el-link>
+                    </li>
+                    <li>
+                        <el-link type="primary" @click="gotToEditPost('new')">新建文章</el-link>
+                    </li>
+                </ul>
+            </div>
+        </el-col>
+    </el-row>
 </template>
 <script>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import 'prismjs'
 import 'prismjs/themes/prism.css'
-import HelloWorld from '../components/HelloWorld.vue'
-import TinymceEditor from '../components/TinymceEditor.vue';
-
-import { updatePage } from '../http/api.js'
+import { pages, posts } from '../http/api.js'
 
 export default {
     name: "index",
     components: {
-        HelloWorld,
-        TinymceEditor
     },
     data() {
         return {
             show: true,
-            title: 'test page',
-            content: 'hello vue3-tinymce!',
-            // editor 配置项
-            setting: {
-                height: 400 // editor 高度
-            },
+            pageList: [],
+            postList: []
         }
     },
+    mounted() {
+        pages().then(res => {
+            if (res.data != null) {
+                this.pageList = res.data
+            }
+        })
+        posts().then(res => {
+            if (res.data != null) {
+                this.postList = res.data
+            }
+        })
+
+    },
     methods: {
-        contentChange: function(data) {
-            console.log(data)
-            this.content = data
-        },
-        showContent(){
-            console.log(this)
-            console.log(this.content)
-            updatePage({id:1, title: this.title}).then(res => {
-                console.log(res)
-            })
-        },
         gotToPage: function (pNum) {
             this.$router.push({ path: '/page', query: { pNum: pNum } })
         },
+        gotToEditPage: function (pNum) {
+            this.$router.push({ path: '/pageEdit', query: { pNum: pNum } })
+        },
         gotToPost: function (pNum) {
             this.$router.push({ path: '/post', query: { pNum: pNum } })
+        },
+        gotToEditPost: function (pNum) {
+            this.$router.push({ path: '/postEdit', query: { pNum: pNum } })
         }
     }
+
 }
 </script>
 
+<style scoped>
+.box {
+    text-align: center;
+    text-align: left;
+}
+</style>

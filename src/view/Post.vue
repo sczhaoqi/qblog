@@ -1,27 +1,49 @@
 <script>
+import 'prismjs'
+import 'prismjs/themes/prism.css'
 import Footer from "../components/Footer.vue"
+import { findPost } from '../http/api.js'
+
 export default {
-    name: "page",
-    components:{
+    name: "post",
+    components: {
         Footer
     },
-    data(){
+    data() {
         return {
-            pNum: 0
+            pNum: 0,
+            updating: false,
+            post: {
+                id: 1,
+                content: '',
+                title: ''
+            }
         }
     },
-    created(){
-        console.log(this.$route.query)
+    created() {
         this.pNum = this.$route.query.pNum
+        findPost({ id: this.pNum })
+            .then((res) => {
+                if (res.status === 200 && res.data) {
+                    this.post = res.data
+                } else {
+                    this.$router.push({ path: '/404', query: { type: 'post' } })
+                }
+            })
+    },
+    methods: {
+        update() {
+            this.$router.push({ path: '/postEdit', query: { pNum: this.pNum } })
+        },
     }
 }
 </script>
 
 <template>
-    这是第{{pNum}}篇文章
+    <div contenteditable="true" v-html="post.content" disabled></div>
+    <el-button @click="update()">编辑</el-button>
     <Footer></Footer>
 </template>
 
 <style scoped>
-
 </style>
