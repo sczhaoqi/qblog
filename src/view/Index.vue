@@ -1,6 +1,6 @@
 <template>
     <el-row>
-        <e-col :span="12">
+        <el-col :span="12">
             <div>
                 <p>页面</p>
                 <ul class="box">
@@ -14,7 +14,7 @@
                     </li>
                 </ul>
             </div>
-        </e-col>
+        </el-col>
         <el-col :span="12">
             <div>
                 <p>文章</p>
