@@ -31,6 +31,7 @@
             </div>
         </el-col>
     </el-row>
+    <Footer></Footer>
 </template>
 <script>
 // This starter template is using Vue 3 <script setup> SFCs
@@ -38,10 +39,12 @@
 import 'prismjs'
 import 'prismjs/themes/prism.css'
 import { pages, posts } from '../http/api.js'
+import Footer from "../components/Footer.vue"
 
 export default {
     name: "index",
     components: {
+        Footer
     },
     data() {
         return {
