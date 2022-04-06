@@ -43,4 +43,18 @@ export function posts(data){
         params: data
     })
 }
+export function login(params){
+    return requestService({
+        url: '/api/auth/login',
+        method: 'get',
+        params: params
+    })
+}
+
+export function userInfo(){
+    return requestService({
+        url: '/api/auth/info',
+        method: 'get'
+    })
+}
 

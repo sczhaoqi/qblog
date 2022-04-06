@@ -3,6 +3,7 @@ import 'prismjs'
 import 'prismjs/themes/prism.css'
 import Footer from "../components/Footer.vue"
 import { findPage } from '../http/api.js'
+import { getUserInfo } from '../http/store.js'
 
 export default {
     name: "page",
@@ -11,16 +12,19 @@ export default {
     },
     data() {
         return {
+            
             pNum: 0,
             updating: false,
             page: {
                 id: 1,
                 content: '',
                 title: ''
-            }
+            },
+            user: undefined
         }
     },
     created() {
+        this.user = getUserInfo()
         this.pNum = this.$route.query.pNum
         findPage({ id: this.pNum })
             .then((res) => {
@@ -41,7 +45,7 @@ export default {
 
 <template>
     <div contenteditable="true" v-html="page.content" disabled></div>
-    <el-button @click="update()">编辑</el-button>
+    <el-button @click="update()"  v-if="user">编辑</el-button>
     <Footer></Footer>
 </template>
 
