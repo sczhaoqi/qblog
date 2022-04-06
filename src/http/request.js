@@ -10,6 +10,10 @@ export function requestService(config) {
     })
     // request拦截器
     service.interceptors.request.use(config => {
+	const token = sessionStorage.getItem('token')
+	if(token && token !== ''){
+	  config.headers['Authorization'] = 'Bearer ' + token
+	}
         return config
     }, error => {
         Promise.reject(error)
