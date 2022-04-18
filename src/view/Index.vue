@@ -45,12 +45,14 @@
             </div>
         </el-col>
     </el-row>
+    <Footer></Footer>
 </template>
 <script>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import 'prismjs'
 import 'prismjs/themes/prism.css'
+import Footer from "../components/Footer.vue"
 import { pages, posts, login } from '../http/api.js'
 import { setToken, getUserInfo, setUserInfo } from '../http/store.js'
 import { ElNotification } from 'element-plus' 
@@ -58,6 +60,7 @@ import { ElNotification } from 'element-plus'
 export default {
     name: "index",
     components: {
+	Footer
     },
     data() {
         return {
