@@ -1,3 +1,5 @@
+import Cookie from 'js-cookie'
+
 export function getUserInfo(){
     if(!sessionStorage.getItem("user")){
         return null
@@ -12,6 +14,7 @@ export function getToken(){
     return sessionStorage.getItem("token")
 }
 export function setToken(info){
+    Cookie.set('token', info)
     return sessionStorage.setItem("token", info)
 }
 
