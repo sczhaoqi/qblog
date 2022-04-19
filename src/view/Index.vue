@@ -7,7 +7,7 @@
             <el-input v-model="loginForm.password" type="password" placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="onSubmit" size="small">登录</el-button>
+            <el-button type="primary" @click="onSubmit">登录</el-button>
         </el-form-item>
     </el-form>
     <el-row v-if="user">
@@ -27,10 +27,10 @@
                         <el-table-column prop="title" label="标题" />
                         <el-table-column label="Operations" width="200">
                             <template #default="scope">
-                                <el-button type="text" size="small" @click="gotToPage(scope.$index)">
+                                <el-button type="text" size="small" @click="gotToPage(scope.row.id)">
                                 查看
                                 </el-button>
-                                <el-button type="text" size="small" v-if="user" @click="gotToEditPage(scope.$index)">
+                                <el-button type="text" size="small" v-if="user" @click="gotToEditPage(scope.row.id)">
                                 编辑
                                 </el-button>
                             </template>
@@ -54,10 +54,10 @@
                         <el-table-column prop="title" label="标题" />
                         <el-table-column label="Operations" width="200">
                             <template #default="scope">
-                                <el-button type="text" size="small" @click="gotToPost(scope.$index)">
+                                <el-button type="text" size="small" @click="gotToPost(scope.row.id)">
                                 查看
                                 </el-button>
-                                <el-button type="text" size="small" v-if="user" @click="gotToEditPost(scope.$index)">
+                                <el-button type="text" size="small" v-if="user" @click="gotToEditPost(scope.row.id)">
                                 编辑
                                 </el-button>
                             </template>
