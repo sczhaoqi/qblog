@@ -7,44 +7,76 @@
             <el-input v-model="loginForm.password" type="password" placeholder="密码"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button type="primary" @click="onSubmit">登录</el-button>
+            <el-button type="primary" @click="onSubmit" size="small">登录</el-button>
         </el-form-item>
     </el-form>
     <el-row v-if="user">
-        <el-col :span="3">Hello, {{user.userName}}</el-col>
-    </el-row>
-    <el-row>
-        <el-col :span="12">
+        <el-col>
             <div>
-                <p>页面</p>
-                <ul class="box">
-                    <li v-if="user">
-                        <el-link type="primary" @click="gotToEditPage('new')">新建页面</el-link>
-                    </li>
-                    <li v-for="page in pageList" :key="page.id" class="scrollbar-demo-item">
-                        {{ '[' + page.id + ']' }}{{ page.title }}
-                        <el-link type="primary" @click="gotToPage(page.id)">查看</el-link>
-                        <el-link type="primary" @click="gotToEditPage(page.id)" v-if="user">|编辑</el-link>
-                    </li>
-                </ul>
+                <span>Hello, {{user.userName}}</span>
+                <el-button type="primary" @click="onLoginOut">退出</el-button>
             </div>
-        </el-col>
-        <el-col :span="12">
-            <div>
-                <p>文章</p>
-                <ul class="box">
-                    <li  v-if="user">
-                        <el-link type="primary" @click="gotToEditPost('new')">新建文章</el-link>
-                    </li>
-                    <li v-for="post in postList" :key="post.id" class="scrollbar-demo-item">
-                        {{ '[' + post.id + ']' }}{{ post.title }}
-                        <el-link type="primary" @click="gotToPost(post.id)">查看</el-link>
-                        <el-link type="primary" @click="gotToEditPost(post.id)" v-if="user">|编辑</el-link>
-                    </li>
-                </ul>
-            </div>
-        </el-col>
+            </el-col>
     </el-row>
+    <el-tabs v-model="currentTab" type="border-card" @tab-click="tabChange">
+        <el-tab-pane label="页面" name="page">
+            <el-button @click="gotToEditPage('new')">新建页面</el-button>
+                <div style="margin: 0 20px 0 20px;">
+                    <el-table :data="currentPageList" >
+                        <el-table-column prop="id" label="ID" width="200" />
+                        <el-table-column prop="title" label="标题" />
+                        <el-table-column label="Operations" width="200">
+                            <template #default="scope">
+                                <el-button type="text" size="small" @click="gotToPage(scope.$index)">
+                                查看
+                                </el-button>
+                                <el-button type="text" size="small" v-if="user" @click="gotToEditPage(scope.$index)">
+                                编辑
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-pagination
+                        small
+                        background
+                        layout="prev, pager, next"
+                        :page-size="pageSize"
+                        :total="pageTotal"
+                        @current-change="handleCurrentPageChange"
+                    />
+                </div>
+        </el-tab-pane>
+        <el-tab-pane label="文章" name="post">
+            <el-button @click="gotToEditPost('new')">新建文章</el-button>
+                <div style="margin: 0 20px 0 20px;">
+                    <el-table :data="currentPostList" >
+                        <el-table-column prop="id" label="ID" width="200" />
+                        <el-table-column prop="title" label="标题" />
+                        <el-table-column label="Operations" width="200">
+                            <template #default="scope">
+                                <el-button type="text" size="small" @click="gotToPost(scope.$index)">
+                                查看
+                                </el-button>
+                                <el-button type="text" size="small" v-if="user" @click="gotToEditPost(scope.$index)">
+                                编辑
+                                </el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-pagination
+                        small
+                        background
+                        layout="prev, pager, next"
+                        :page-size="postSize"
+                        :total="postTotal"
+                        @current-change="handleCurrentPostChange"
+                    />
+                </div>
+        </el-tab-pane>
+        <el-tab-pane label="报表" name="report" :disabled="!user">
+            积木开源报表系统
+        </el-tab-pane>
+    </el-tabs>
     <Footer></Footer>
 </template>
 <script>
@@ -54,19 +86,27 @@ import 'prismjs'
 import 'prismjs/themes/prism.css'
 import Footer from "../components/Footer.vue"
 import { pages, posts, login } from '../http/api.js'
-import { setToken, getUserInfo, setUserInfo } from '../http/store.js'
+import { setToken, getUserInfo, setUserInfo, logout } from '../http/store.js'
 import { ElNotification } from 'element-plus' 
+import { toRaw } from 'vue-demi'
 
 export default {
     name: "index",
     components: {
-	Footer
+        Footer
     },
     data() {
         return {
             show: true,
+            currentTab: 'page',
             pageList: [],
+            pageTotal: 0,
+            pageSize: 10,
+            currentPageList: [],
             postList: [],
+            postTotal: 0,
+            postSize: 10,
+            currentPostList: [],
             loginForm: {
                 username: '',
                 password: ''
@@ -79,16 +119,36 @@ export default {
         pages().then(res => {
             if (res.data != null) {
                 this.pageList = res.data
+                this.pageTotal = this.pageList.length
+                this.currentPageList = this.pageList.slice(0, 10)
             }
         })
         posts().then(res => {
             if (res.data != null) {
                 this.postList = res.data
+                this.postTotal = this.postList.length
+                this.currentPostList = this.postList.slice(0, 10)
             }
         })
 
     },
     methods: {
+        tabChange (tab, evt) {
+            const tabValue = toRaw(tab.props)
+            console.log(tab,tab.props, tabValue, evt, tab.name)
+            if (tabValue.name === 'report') {
+                const {href} = this.$router.resolve({path: '/jmreport/list'})
+                window.open(href, '_blank')
+            }
+        },
+        handleCurrentPageChange (page) {
+            const pageSize = this.pageSize
+            this.currentPageList = this.pageList.slice(page * pageSize - pageSize, page * pageSize)
+        },
+        handleCurrentPostChange (page) {
+            const pageSize = this.postSize
+            this.currentPostList = this.postList.slice(page * pageSize - pageSize, page * pageSize)
+        },
         gotToPage: function (pNum) {
             this.$router.push({ path: '/page', query: { pNum: pNum } })
         },
@@ -115,6 +175,10 @@ export default {
                     })
                 }
             })
+        },
+        onLoginOut: function() {
+            logout()
+            this.$router.go(0) 
         }
     }
 

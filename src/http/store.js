@@ -17,4 +17,8 @@ export function setToken(info){
     Cookie.set('token', info)
     return sessionStorage.setItem("token", info)
 }
+export function logout(){
+    sessionStorage.clear()
+    Cookie.remove('token')
+}
 
