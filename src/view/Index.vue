@@ -140,7 +140,7 @@ export default {
             postTotal: 0,
             postSize: 10,
             currentPostList: [],
-            newsSize: 0,
+            newsSize: 20,
             newsTotal: 0,
             currentNewsList: [],
             dialogNewsDetailsVisible: false,
@@ -176,7 +176,6 @@ export default {
     methods: {
         tabChange (tab, evt) {
             const tabValue = toRaw(tab.props)
-            console.log(tab,tab.props, tabValue, evt, tab.name)
             if (tabValue.name === 'report') {
                 const {href} = this.$router.resolve({path: '/jmreport/list'})
                 window.open(href, '_blank')
@@ -191,15 +190,13 @@ export default {
             this.currentPostList = this.postList.slice(page * pageSize - pageSize, page * pageSize)
         },
         handleCurrentNewsChange (page) {
-            console.log(page)
             this.loadNews(page)
         },
         loadNews (page) {
             news(page).then(res => {
-                console.log(res.data)
                 this.currentNewsList = res.data.content
                 this.newsTotal = res.data.totalElements
-                console.log(this.newsTotal)
+                this.newsSize = 20
             })
         },
         showNews (record) {
