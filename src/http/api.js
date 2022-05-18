@@ -58,3 +58,14 @@ export function userInfo(){
     })
 }
 
+export function news(page){
+    return requestService({
+        url: '/api/xwlb',
+        method: 'get',
+        params: {
+            page: page,
+            size: 20
+        }
+    })
+}
+

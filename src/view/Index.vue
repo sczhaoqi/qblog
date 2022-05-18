@@ -73,11 +73,44 @@
                     />
                 </div>
         </el-tab-pane>
+        <el-tab-pane label="新闻" name="news">
+            <div style="margin: 0 20px 0 20px;">
+                <el-table :data="currentNewsList" >
+                    <el-table-column prop="id" label="ID" width="200" />
+                    <el-table-column prop="postDate" label="日期" />
+                    <el-table-column prop="title" label="标题" />
+                    <el-table-column label="Operations" width="200">
+                        <template #default="scope">
+                            <el-button type="default" size="small" @click="showNews(scope.row)">
+                            查看
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                    small
+                    background
+                    layout="prev, pager, next"
+                    :page-size="newsSize"
+                    :total="newsTotal"
+                    @current-change="handleCurrentNewsChange"
+                />
+            </div>
+        </el-tab-pane>
         <el-tab-pane label="报表" name="report" :disabled="!user">
             积木开源报表系统
         </el-tab-pane>
     </el-tabs>
     <Footer></Footer>
+    <el-dialog v-model="dialogNewsDetailsVisible" :title="dialogNewsDetails.title" width="30%" draggable>
+        <div v-html="dialogNewsDetails.content" style="white-space: pre-line;text-align: initial;">
+        </div>
+        <template #footer>
+        <span class="dialog-footer">
+            <el-button type="primary" @click="dialogNewsDetailsVisible = false">Close</el-button>
+        </span>
+        </template>
+    </el-dialog>
 </template>
 <script>
 // This starter template is using Vue 3 <script setup> SFCs
@@ -85,7 +118,7 @@
 import 'prismjs'
 import 'prismjs/themes/prism.css'
 import Footer from "../components/Footer.vue"
-import { pages, posts, login } from '../http/api.js'
+import { pages, posts, news, login } from '../http/api.js'
 import { setToken, getUserInfo, setUserInfo, logout } from '../http/store.js'
 import { ElNotification } from 'element-plus' 
 import { toRaw } from 'vue-demi'
@@ -107,6 +140,14 @@ export default {
             postTotal: 0,
             postSize: 10,
             currentPostList: [],
+            newsSize: 0,
+            newsTotal: 0,
+            currentNewsList: [],
+            dialogNewsDetailsVisible: false,
+            dialogNewsDetails: {
+                title: '',
+                content: ''
+            },
             loginForm: {
                 username: '',
                 password: ''
@@ -130,7 +171,7 @@ export default {
                 this.currentPostList = this.postList.slice(0, 10)
             }
         })
-
+        this.loadNews(0)
     },
     methods: {
         tabChange (tab, evt) {
@@ -148,6 +189,22 @@ export default {
         handleCurrentPostChange (page) {
             const pageSize = this.postSize
             this.currentPostList = this.postList.slice(page * pageSize - pageSize, page * pageSize)
+        },
+        handleCurrentNewsChange (page) {
+            console.log(page)
+            this.loadNews(page)
+        },
+        loadNews (page) {
+            news(page).then(res => {
+                console.log(res.data)
+                this.currentNewsList = res.data.content
+                this.newsTotal = res.data.totalElements
+                console.log(this.newsTotal)
+            })
+        },
+        showNews (record) {
+            this.dialogNewsDetailsVisible = true
+            this.dialogNewsDetails = record
         },
         gotToPage: function (pNum) {
             this.$router.push({ path: '/page', query: { pNum: pNum } })
