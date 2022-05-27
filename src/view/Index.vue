@@ -97,9 +97,6 @@
                 />
             </div>
         </el-tab-pane>
-        <el-tab-pane label="报表" name="report" :disabled="!user">
-            积木开源报表系统
-        </el-tab-pane>
     </el-tabs>
     <Footer></Footer>
     <el-dialog v-model="dialogNewsDetailsVisible" :title="dialogNewsDetails.title" width="30%" draggable>
@@ -176,10 +173,6 @@ export default {
     methods: {
         tabChange (tab, evt) {
             const tabValue = toRaw(tab.props)
-            if (tabValue.name === 'report') {
-                const {href} = this.$router.resolve({path: '/jmreport/list'})
-                window.open(href, '_blank')
-            }
         },
         handleCurrentPageChange (page) {
             const pageSize = this.pageSize
