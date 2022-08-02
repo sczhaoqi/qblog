@@ -19,6 +19,18 @@ const constantRoutes: RouteRecordRaw[] = [
 		]
 	},
 	{
+		path: '/post',
+		component: () => import('../views/site/post.vue')
+	},
+	{
+		path: '/page',
+		component: () => import('../views/site/page.vue')
+	},
+	{
+		path: '/xinwen',
+		component: () => import('../views/site/xinwen.vue')
+	},
+	{
 		path: '/login',
 		component: () => import('../views/login/login.vue')
 	},
@@ -113,7 +125,7 @@ export const router = createRouter({
 })
 
 // 白名单列表
-const whiteList = ['/login']
+const whiteList = ['/login', '/page', '/post', '/xinwen']
 
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
@@ -154,7 +166,7 @@ router.beforeEach(async (to, from, next) => {
 		if (whiteList.indexOf(to.path) > -1) {
 			next()
 		} else {
-			next('/login')
+			next('/post')
 		}
 	}
 })

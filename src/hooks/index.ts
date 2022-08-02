@@ -127,7 +127,6 @@ export const useCrud = (options: IHooksOptions) => {
 			data = [key]
 		} else {
 			data = state.dataListSelections ? state.dataListSelections : []
-
 			if (data.length === 0) {
 				ElMessage.warning('请选择删除记录')
 				return
