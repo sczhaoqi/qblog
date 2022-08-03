@@ -34,6 +34,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useCrud } from '@/hooks'
 import { IHooksOptions } from '@/hooks/interface'
+import { router } from '@/router'
 
 import Header from '@/layout/components/Header.vue'
 import Footer from '@/layout/components/Footer.vue'
@@ -47,7 +48,7 @@ const state: IHooksOptions = reactive({
 	}
 })
 const viewDetails = (id: any) => {
-	const toPath = router.currentRoute.value.fullPath.indexOf('/site') === -1 ? '/xinwen' : '/site/xinwen/xinwenView'
+	const toPath = router.currentRoute.value.fullPath.indexOf('/site') === -1 ? '/xinwenView' : '/site/xinwen/xinwenView'
 	console.log(toPath)
 	router.push({ path: toPath, query: { id: id } })
 }

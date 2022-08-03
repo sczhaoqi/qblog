@@ -34,6 +34,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { useCrud } from '@/hooks'
 import { IHooksOptions } from '@/hooks/interface'
+import { router } from '@/router'
 
 import Header from '@/layout/components/Header.vue'
 import Footer from '@/layout/components/Footer.vue'
