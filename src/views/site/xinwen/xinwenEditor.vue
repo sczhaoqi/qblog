@@ -27,7 +27,7 @@ const route = useRoute()
 const data = ref({ content: '', id: undefined, title: '' })
 const title = ref('')
 const content = ref('')
-const id = ref('')
+const id = ref()
 
 const getOne = (id: string | undefined) => {
 	if (id) {
