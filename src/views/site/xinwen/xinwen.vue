@@ -41,10 +41,15 @@ import Footer from '@/layout/components/Footer.vue'
 const state: IHooksOptions = reactive({
 	dataListUrl: '/xwlb',
 	deleteUrl: '/xwlb',
-	queryForm: {}
+	queryForm: {
+		order: 'create_time',
+		asc: false
+	}
 })
 const viewDetails = (id: any) => {
-	console.log(id)
+	const toPath = router.currentRoute.value.fullPath.indexOf('/site') === -1 ? '/xinwen' : '/site/xinwen/xinwenView'
+	console.log(toPath)
+	router.push({ path: toPath, query: { id: id } })
 }
 const { getDataList, sizeChangeHandle, selectionChangeHandle, sortChangeHandle, currentChangeHandle, deleteHandle, deleteBatchHandle } =
 	useCrud(state)

@@ -1,5 +1,5 @@
 <template>
-	<el-row justify="end" style="margin: 20px 0">
+	<el-row v-show="router.currentRoute.value.fullPath.indexOf('/site') === -1" justify="end" style="margin: 20px 0">
 		<el-col :span="12">
 			<el-button-group>
 				<el-button type="primary" @click="toPage"> 页面</el-button>

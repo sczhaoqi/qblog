@@ -20,15 +20,27 @@ const constantRoutes: RouteRecordRaw[] = [
 	},
 	{
 		path: '/post',
-		component: () => import('../views/site/post.vue')
+		component: () => import('../views/site/post/post.vue')
+	},
+	{
+		path: '/postView',
+		component: () => import('../views/site/post/postView.vue')
 	},
 	{
 		path: '/page',
-		component: () => import('../views/site/page.vue')
+		component: () => import('../views/site/page/page.vue')
+	},
+	{
+		path: '/pageView',
+		component: () => import('../views/site/page/pageView.vue')
 	},
 	{
 		path: '/xinwen',
-		component: () => import('../views/site/xinwen.vue')
+		component: () => import('../views/site/xinwen/xinwen.vue')
+	},
+	{
+		path: '/xinwenView',
+		component: () => import('../views/site/xinwen/xinwenView.vue')
 	},
 	{
 		path: '/login',
@@ -68,6 +80,78 @@ const asyncRoutes: RouteRecordRaw = {
 
 // 配置常量菜单
 export const constantMenu = [
+	{
+		id: 9000,
+		name: 'Site',
+		url: null,
+		openStyle: 0,
+		icon: 'icon-windows',
+		children: [
+			{
+				id: 90011,
+				name: '页面列表',
+				url: 'site/page/page',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			},
+			{
+				id: 90012,
+				name: '页面更新',
+				url: 'site/page/pageEditor',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			},
+			{
+				id: 90013,
+				name: '页面详情',
+				url: 'site/page/pageView',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			},
+			{
+				id: 90021,
+				name: '文章列表',
+				url: 'site/post/post',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			},
+			{
+				id: 90022,
+				name: '文章更新',
+				url: 'site/post/postEditor',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			},
+			{
+				id: 90023,
+				name: '文章详情',
+				url: 'site/post/postView',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			},
+			{
+				id: 90031,
+				name: '新闻列表',
+				url: 'site/xinwen/xinwen',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			},
+			{
+				id: 90032,
+				name: '新闻更新',
+				url: 'site/xinwen/xinwenEditor',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			},
+			{
+				id: 90033,
+				name: '新闻详情',
+				url: 'site/xinwen/xinwenView',
+				openStyle: 0,
+				icon: 'icon-unorderedlist'
+			}
+		]
+	},
 	{
 		id: 1000,
 		name: 'Demo',
@@ -125,7 +209,7 @@ export const router = createRouter({
 })
 
 // 白名单列表
-const whiteList = ['/login', '/page', '/post', '/xinwen']
+const whiteList = ['/login', '/post', '/page', '/xinwen', '/postView', '/pageView', '/xinwenView']
 
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
@@ -203,6 +287,7 @@ const layoutModules = import.meta.glob('/src/views/**/*.vue')
 // 根据路径，动态获取vue组件
 const getDynamicComponent = (path: string): any => {
 	const component = layoutModules[`/src/views/${path}.vue`]
+	console.log(path)
 	if (!component) {
 		console.error('组件不存在，路径为：', path)
 	}

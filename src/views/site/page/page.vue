@@ -37,14 +37,20 @@ import { IHooksOptions } from '@/hooks/interface'
 
 import Header from '@/layout/components/Header.vue'
 import Footer from '@/layout/components/Footer.vue'
+import { router } from '@/router'
 
 const state: IHooksOptions = reactive({
 	dataListUrl: '/blog/page',
 	deleteUrl: '/blog/page',
-	queryForm: {}
+	queryForm: {
+		order: 'create_time',
+		asc: false
+	}
 })
 const viewDetails = (id: any) => {
-	console.log(id)
+	const toPath = router.currentRoute.value.fullPath.indexOf('/site') === -1 ? '/pageView' : '/site/page/pageView'
+	console.log(toPath)
+	router.push({ path: toPath, query: { id: id } })
 }
 const { getDataList, sizeChangeHandle, selectionChangeHandle, sortChangeHandle, currentChangeHandle, deleteHandle, deleteBatchHandle } =
 	useCrud(state)
