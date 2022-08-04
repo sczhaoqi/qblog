@@ -53,7 +53,14 @@ const editorConfig: Partial<IEditorConfig> = {
 	readOnly: props.disabled,
 	MENU_CONF: {
 		uploadImage: {
-			server: 'http://localhost:8080/api/upload' // 上传地址
+			server: import.meta.env.VITE_API_URL + '/upload/image', // 上传地址
+			// 自定义插入图片
+			customInsert: (res: any, insertFn: any) => {
+				// TS 语法
+				// res 即服务端的返回结果
+				// 从 res 中找到 url alt href ，然后插图图片
+				insertFn(res.data.url, '', res.data.url)
+			}
 		}
 	}
 }
@@ -77,3 +84,4 @@ const handleChange = (editor: IDomEditor) => {
 	emit('update:modelValue', editor.getHtml())
 }
 </script>
+
