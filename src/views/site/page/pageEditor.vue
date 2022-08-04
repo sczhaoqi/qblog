@@ -73,3 +73,4 @@ onMounted(() => {
 	getOne(id.value)
 })
 </script>
+

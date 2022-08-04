@@ -27,30 +27,26 @@ const route = useRoute()
 const data = ref({ content: '', id: undefined, title: '' })
 const title = ref('')
 const content = ref('')
-const id = ref()
+const id = ref(-1)
 
-const getOne = (id: string | undefined) => {
+const getOne = (id: number | undefined) => {
 	if (id) {
 		service.get('/xwlb/' + id).then(res => {
 			data.value = res.data
 			title.value = data.value.title
-			if (data.value.content.startsWith('<p>')){
-				content.value = data.value.content
-			} else {
-				content.value = '<p>' + data.value.content + '</p>'
-			}
+			content.value = data.value.content
 		})
 	}
 }
 const saveOrUpdate = () => {
-	if (id.value === '') {
+	if (id.value === -1) {
 		service
 			.post('/xwlb', {
-				id: Date.parse(new Date().toString()) + 'x',
+				pageId: Date.parse(new Date().toString()) + 'x',
 				title: title.value,
 				content: content.value,
-				page_url: '',
-				post_date: 'YYYY-MM-DD'
+				pageUrl: '',
+				postDate: 'YYYY-MM-DD'
 			})
 			.then(res => {
 				if (res) {
@@ -75,8 +71,9 @@ const saveOrUpdate = () => {
 }
 onMounted(() => {
 	if (router.currentRoute.value.query.id) {
-		id.value = router.currentRoute.value.query.id
+		id.value = Number(router.currentRoute.value.query.id)
 	}
 	getOne(id.value)
 })
 </script>
+

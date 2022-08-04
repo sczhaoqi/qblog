@@ -1,6 +1,6 @@
 <template>
-	<Header></Header>
 	<div id="home_box">
+		<Header></Header>
 		<div id="home_main">
 			<el-table
 				v-loading="state.dataListLoading"
@@ -32,8 +32,8 @@
 			>
 			</el-pagination>
 		</div>
+		<Footer></Footer>
 	</div>
-	<Footer></Footer>
 </template>
 
 <script setup lang="ts">
@@ -77,3 +77,4 @@ const { getDataList, sizeChangeHandle, selectionChangeHandle, sortChangeHandle, 
 <style>
 @import '../site.css';
 </style>
+

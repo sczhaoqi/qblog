@@ -48,7 +48,7 @@ const saveOrUpdate = () => {
 			.then(res => {
 				if (res) {
 					ElMessage.success('创建成功')
-					router.push('/site/post/post')
+					router.push('/site/post/post/')
 				}
 			})
 	} else {
@@ -61,7 +61,7 @@ const saveOrUpdate = () => {
 			.then(res => {
 				if (res) {
 					ElMessage.success('更新成功')
-					router.push('/site/post/post')
+					router.push('/site/post/post/')
 				}
 			})
 	}
@@ -73,3 +73,4 @@ onMounted(() => {
 	getOne(id.value)
 })
 </script>
+
