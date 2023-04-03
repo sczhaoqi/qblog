@@ -4,7 +4,7 @@
 		<p>
 			<a href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=51012202001089"
 				><img class="alignnone size-full wp-image-628" src="@/assets/gongan.png" alt="" width="20" height="20" />公安备案号51012202001089</a
-			>|<a href="https://beian.miit.gov.cn/">蜀ICP备2021025163号</a>-1
+			>|<a href="https://beian.miit.gov.cn/">蜀ICP备2021025163号</a>-2
 		</p>
 	</div>
 </template>

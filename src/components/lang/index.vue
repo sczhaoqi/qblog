@@ -3,7 +3,7 @@
 		<svg-icon icon="icon-translate"></svg-icon>
 		<template #dropdown>
 			<el-dropdown-menu>
-				<el-dropdown-item v-for="language in languages" :key="language" :disabled="locale === language" :command="language">
+				<el-dropdown-item v-for="language in languages" :key="language" :disabled="locale.value === language" :command="language">
 					{{ messages[language].langName }}
 				</el-dropdown-item>
 			</el-dropdown-menu>
